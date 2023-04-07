@@ -1,0 +1,35 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [18]
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Install
+        run: |
+          npm ci
+
+      - name: Build
+        run: |
+          npm run build
+
+      - name: Lint
+        run: |
+          npm run lint
+
+      - name: tests
+        run: |
+          npm run test:ci
